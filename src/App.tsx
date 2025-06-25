@@ -1,13 +1,51 @@
-import { useState } from 'react';
+import { useState, type JSX } from 'react';
+
+// --- Type Definitions for TypeScript ---
+// กำหนด Type สำหรับ object ที่เก็บข้อมูลไอคอนและสีของเทคโนโลยี
+interface TechDetails {
+  icon: JSX.Element; // icon เป็น React Element (ในกรณีนี้คือ <img>)
+  colors: string;     // colors เป็น string สำหรับ Tailwind CSS
+}
+
+// กำหนด Type สำหรับ map หลักของ techIcons
+// [key: string]: TechDetails หมายถึง key ทุกตัวใน object นี้จะเป็น string และ value จะเป็น TechDetails
+type TechIconsMap = {
+  [key: string]: TechDetails;
+};
+
+// กำหนด Type สำหรับ Project object ภายใน ExperienceSection
+interface Project {
+  name: string;
+  description: string[]; // description เป็น array ของ string
+  technologies: string[]; // technologies เป็น array ของ string (ชื่อเทคโนโลยี)
+}
+
+// กำหนด Type สำหรับ JobCard component's props
+interface JobCardProps {
+  company: string;
+  title: string;
+  dates: string;
+  projects: Project[]; // projects เป็น array ของ Project
+}
+
+// กำหนด Type สำหรับ ProjectCard component's props
+interface ProjectCardProps {
+  name: string;
+  description: string[];
+  technologies: string[];
+}
+// --- End Type Definitions ---
+
 
 // Define a map for technology icons and colors using provided shield.io URLs
-const techIcons = {
+// ระบุ Type ให้ techIcons เพื่อให้ TypeScript เข้าใจโครงสร้าง
+const techIcons: TechIconsMap = {
   // Languages
   "Java": {
     icon: <img src="https://img.shields.io/badge/Java-%23007396.svg?style=flat&logo=java&logoColor=white" alt="Java Logo" className="h-4 w-auto" />,
     colors: "bg-[#007396] text-white"
   },
-  "C#": { // Mapping C# skill to C# badge
+  "C#": {
     icon: <img src="https://img.shields.io/badge/C%23-%23239120.svg?style=flat&logo=c-sharp&logoColor=white" alt="C# Logo" className="h-4 w-auto" />,
     colors: "bg-[#239120] text-white"
   },
@@ -19,7 +57,7 @@ const techIcons = {
     icon: <img src="https://img.shields.io/badge/JavaScript-%23F7DF1E.svg?style=flat&logo=javascript&logoColor=black" alt="JavaScript Logo" className="h-4 w-auto" />,
     colors: "bg-[#F7DF1E] text-black"
   },
-  "SQL": { // Using MySQL logo for generic SQL from reference
+  "SQL": {
     icon: <img src="https://img.shields.io/badge/SQL-%2300B4DB.svg?style=flat&logo=mysql&logoColor=white" alt="SQL Logo" className="h-4 w-auto" />,
     colors: "bg-[#00B4DB] text-white"
   },
@@ -37,7 +75,7 @@ const techIcons = {
     icon: <img src="https://img.shields.io/badge/Vue.js-%234FC08D.svg?style=flat&logo=vue.js&logoColor=white" alt="Vue.js Logo" className="h-4 w-auto" />,
     colors: "bg-[#4FC08D] text-white"
   },
-  "Dart": { // Reusing Flutter's badge for Dart as no specific Dart badge was provided
+  "Dart": {
     icon: <img src="https://img.shields.io/badge/Flutter-%2302569B.svg?style=flat&logo=flutter&logoColor=white" alt="Dart (Flutter) Logo" className="h-4 w-auto" />,
     colors: "bg-[#02569B] text-white"
   },
@@ -47,11 +85,11 @@ const techIcons = {
   },
 
   // Backend / API
-  "JAVA Spring Boot": { // Key matches skill/experience data
+  "JAVA Spring Boot": {
     icon: <img src="https://img.shields.io/badge/Spring_Boot-%236DB33F.svg?style=flat&logo=spring-boot&logoColor=white" alt="Spring Boot Logo" className="h-4 w-auto" />,
     colors: "bg-[#6DB33F] text-white"
   },
-  "C# .NET Core": { // Key matches skill/experience data
+  "C# .NET Core": {
     icon: <img src="https://img.shields.io/badge/.NET_Core-%23512BD4.svg?style=flat&logo=dotnet&logoColor=white" alt=".NET Core Logo" className="h-4 w-auto" />,
     colors: "bg-[#512BD4] text-white"
   },
@@ -59,9 +97,9 @@ const techIcons = {
     icon: <img src="https://img.shields.io/badge/Node.js-%23339933.svg?style=flat&logo=node.js&logoColor=white" alt="Node.js Logo" className="h-4 w-auto" />,
     colors: "bg-[#339933] text-white"
   },
-  "REST APIs": { // Key matches skill/experience data, badge is "REST API"
+  "REST APIs": {
     icon: <img src="https://img.shields.io/badge/REST-API-blue.svg?style=flat" alt="REST API Badge" className="h-4 w-auto" />,
-    colors: "bg-blue-600 text-white" // Using Tailwind default blue for generic "blue" badge
+    colors: "bg-blue-600 text-white"
   },
 
   // Databases
@@ -77,7 +115,7 @@ const techIcons = {
     icon: <img src="https://img.shields.io/badge/MongoDB-%2347A248.svg?style=flat&logo=mongodb&logoColor=white" alt="MongoDB Logo" className="h-4 w-auto" />,
     colors: "bg-[#47A248] text-white"
   },
-  "NoSQL": { // Using MongoDB's badge for NoSQL as it's the specific NoSQL example provided
+  "NoSQL": {
     icon: <img src="https://img.shields.io/badge/MongoDB-%2347A248.svg?style=flat&logo=mongodb&logoColor=white" alt="NoSQL (MongoDB) Logo" className="h-4 w-auto" />,
     colors: "bg-[#47A248] text-white"
   },
@@ -99,11 +137,11 @@ const techIcons = {
     icon: <img src="https://img.shields.io/badge/Agile-Development-green.svg?style=flat" alt="Agile Badge" className="h-4 w-auto" />,
     colors: "bg-green-600 text-white"
   },
-  "Scrum": { // Mapping Scrum to Agile badge for consistency
+  "Scrum": {
     icon: <img src="https://img.shields.io/badge/Agile-Development-green.svg?style=flat" alt="Scrum (Agile) Badge" className="h-4 w-auto" />,
     colors: "bg-green-600 text-white"
   },
-  "Microservices": { // Key matches skill/experience data, badge is "Microservices-Architecture"
+  "Microservices": {
     icon: <img src="https://img.shields.io/badge/Microservices-Architecture-orange.svg?style=flat" alt="Microservices Architecture Badge" className="h-4 w-auto" />,
     colors: "bg-orange-600 text-white"
   },
@@ -120,15 +158,15 @@ const techIcons = {
     icon: <img src="https://placehold.co/16x16/amber/white?text=IoT" alt="IoT Protocols Placeholder" className="h-4 w-auto" />,
     colors: "bg-amber-700 text-amber-100"
   },
-  "Vanilla JavaScript": { // Reusing general JavaScript badge
+  "Vanilla JavaScript": {
     icon: <img src="https://img.shields.io/badge/JavaScript-%23F7DF1E.svg?style=flat&logo=javascript&logoColor=black" alt="Vanilla JavaScript Logo" className="h-4 w-auto" />,
     colors: "bg-[#F7DF1E] text-black"
   },
 };
 
-
 // Helper function to get tech details (icon and colors)
-const getTechDetails = (techName) => techIcons[techName] || { icon: null, colors: "bg-gray-600 text-gray-200" };
+// ระบุ Type ของ parameter 'techName' เป็น string และ return Type เป็น TechDetails
+const getTechDetails = (techName: string): TechDetails => techIcons[techName] || { icon: null as any, colors: "bg-gray-600 text-gray-200" };
 
 
 // Main App Component
@@ -164,7 +202,7 @@ const App = () => {
 export default App;
 
 // --- Component: HeroSection ---
-const HeroSection = () => {
+export const HeroSection = () => {
   const contactInfo = {
     email: "Ravarich@gmail.com",
     telephone: "0894030236",
@@ -200,7 +238,7 @@ const HeroSection = () => {
 };
 
 // --- Component: AboutSection ---
-const AboutSection = () => {
+export const AboutSection = () => {
   return (
     // ปรับพื้นหลัง, shadow, border และสีข้อความ
     <section className="mb-12 p-8 bg-gray-900 rounded-xl shadow-lg border border-gray-700">
@@ -213,7 +251,7 @@ const AboutSection = () => {
 };
 
 // --- Component: SkillsSection ---
-const SkillsSection = () => {
+export const SkillsSection = () => {
   const skills = {
     backend: [
       { name: "JAVA Spring Boot", level: "Proficient" },
@@ -240,7 +278,6 @@ const SkillsSection = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <h3 className="text-2xl font-semibold mb-4 text-purple-400 flex items-center"> {/* ปรับสีหัวข้อย่อย */}
-            {/* Using a placeholder SVG icon for Backend category header as a general representation */}
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 text-purple-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
             </svg>
@@ -248,10 +285,10 @@ const SkillsSection = () => {
           </h3>
           <ul className="space-y-2 text-gray-300">
             {skills.backend.map((skill, index) => {
-              const details = getTechDetails(skill.name); // ดึง icon และ colors จาก techIcons
+              const details = getTechDetails(skill.name);
               return (
                 <li key={index} className="flex items-center p-2 rounded-md hover:bg-gray-800 transition-colors duration-200">
-                  {details.icon && <span className="mr-2">{details.icon}</span>} {/* แสดง icon (ซึ่งตอนนี้เป็น img) */}
+                  {details.icon && <span className="mr-2">{details.icon}</span>}
                   {skill.name} <span className="ml-2 text-sm text-gray-400">({skill.level})</span>
                 </li>
               );
@@ -260,7 +297,6 @@ const SkillsSection = () => {
         </div>
         <div>
           <h3 className="text-2xl font-semibold mb-4 text-purple-400 flex items-center"> {/* ปรับสีหัวข้อย่อย */}
-            {/* Using a placeholder SVG icon for Frontend category header as a general representation */}
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 text-purple-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-1-3m-6.938-1.562L10 5m-5 5L10 10m11-4v4m0 0v4m0-4h-4m4 0h-4m-9-4h4m-4 0v4m0 0h4m-9-4v4" />
             </svg>
@@ -268,10 +304,10 @@ const SkillsSection = () => {
           </h3>
           <ul className="space-y-2 text-gray-300">
             {skills.frontend.map((skill, index) => {
-              const details = getTechDetails(skill.name); // ดึง icon และ colors จาก techIcons
+              const details = getTechDetails(skill.name);
               return (
                 <li key={index} className="flex items-center p-2 rounded-md hover:bg-gray-800 transition-colors duration-200">
-                  {details.icon && <span className="mr-2">{details.icon}</span>} {/* แสดง icon (ซึ่งตอนนี้เป็น img) */}
+                  {details.icon && <span className="mr-2">{details.icon}</span>}
                   {skill.name} <span className="ml-2 text-sm text-gray-400">({skill.level})</span>
                 </li>
               );
@@ -284,7 +320,7 @@ const SkillsSection = () => {
 };
 
 // --- Component: ExperienceSection ---
-const ExperienceSection = () => {
+export const ExperienceSection = () => {
   const experiences = [
     {
       company: "EXTEND IT RESOURCE CO., LTD (On-site at TMBThanachart Bank Public Company Limited)",
@@ -344,8 +380,8 @@ const ExperienceSection = () => {
         {
           name: "Flight and Trip Booking (2018-2019)",
           description: [
-            "Optimized database structures and workflows, increasing query performance by 30%.", // Corrected this line to be a single string
-            "Built RESTful APIs using Node.js, TypeScript, and MySQL, and developed React frontend components, driving user satisfaction." // Corrected this line to be a single string
+            "Optimized database structures and workflows, increasing query performance by 30%.",
+            "Built RESTful APIs using Node.js, TypeScript, and MySQL, and developed React frontend components, driving user satisfaction."
           ],
           technologies: ["Node.js", "TypeScript", "MySQL", "React", "REST APIs"]
         },
@@ -375,8 +411,8 @@ const ExperienceSection = () => {
 };
 
 // --- Component: JobCard (Sub-component of ExperienceSection) ---
-const JobCard = ({ company, title, dates, projects }) => {
-  const [isOpen, setIsOpen] = useState(false); // State to manage project list visibility
+export const JobCard = ({ company, title, dates, projects }: JobCardProps) => {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700 transform hover:scale-[1.01] transition-transform duration-200 hover:shadow-xl hover:border-blue-600">
@@ -401,7 +437,6 @@ const JobCard = ({ company, title, dates, projects }) => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
           </button>
-          {/* แก้ไขตรงนี้: เปลี่ยน max-h-screen เป็น max-h-[9999px] */}
           <div className={`mt-4 overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[9999px] opacity-100' : 'max-h-0 opacity-0'}`}>
             <div className="space-y-4">
               {projects.map((project, idx) => (
@@ -416,28 +451,25 @@ const JobCard = ({ company, title, dates, projects }) => {
 };
 
 // --- Component: ProjectCard (Sub-component of JobCard) ---
-const ProjectCard = ({ name, description, technologies }) => { // รับ prop technologies เข้ามา
+export const ProjectCard = ({ name, description, technologies }: ProjectCardProps) => {
   return (
-    // ปรับพื้นหลัง, shadow, border และสีข้อความ
-    <div className="bg-gray-700 p-5 rounded-md shadow-inner border border-gray-600 hover:shadow-md hover:border-teal-500 transition-all duration-200"> {/* เพิ่ม hover effect */}
-      <h4 className="text-xl font-medium text-teal-300 mb-2">{name}</h4> {/* ปรับสีชื่อโปรเจกต์ */}
+    <div className="bg-gray-700 p-5 rounded-md shadow-inner border border-gray-600 hover:shadow-md hover:border-teal-500 transition-all duration-200">
+      <h4 className="text-xl font-medium text-teal-300 mb-2">{name}</h4>
       <ul className="list-disc list-inside space-y-1 text-gray-200">
         {description.map((item, index) => (
           <li key={index}>{item}</li>
         ))}
       </ul>
-      {technologies && technologies.length > 0 && ( // แสดงเทคโนโลยีถ้ามี
+      {technologies && technologies.length > 0 && (
         <div className="mt-4 flex flex-wrap gap-2">
           {technologies.map((tech, index) => {
-            const details = getTechDetails(tech); // ใช้ helper function เพื่อดึง icon และสี
+            const details = getTechDetails(tech);
             return (
               <span
                 key={index}
-                className={`flex items-center px-3 py-1 text-xs font-semibold rounded-full shadow-sm transition-colors duration-150 cursor-default ${details.colors}`} // ใช้สีจาก details.colors
-                title={tech} // เพิ่ม tooltip เมื่อ hover เพื่อบอกชื่อเทคโนโลยี
+                title={tech}
               >
-                {details.icon && <span className="mr-1">{details.icon}</span>} {/* แสดง icon */}
-                {tech} {/* แสดงชื่อเทคโนโลยี */}
+                {details.icon && <span className="mr-1">{details.icon}</span>}
               </span>
             );
           })}
@@ -448,7 +480,7 @@ const ProjectCard = ({ name, description, technologies }) => { // รับ prop
 };
 
 // --- Component: EducationSection ---
-const EducationSection = () => {
+export const EducationSection = () => {
   const education = {
     degree: "Bachelor of Science (B.S.) in Computer Science",
     university: "King Mongkut's University of Technology Thonburi",
@@ -456,12 +488,11 @@ const EducationSection = () => {
   };
 
   return (
-    // ปรับพื้นหลัง, shadow, border และสีข้อความ
     <section className="mb-12 p-8 bg-gray-900 rounded-xl shadow-lg border border-gray-700">
-      <h2 className="text-3xl font-bold mb-4 text-teal-400">Education</h2> {/* ปรับสีหัวข้อ */}
+      <h2 className="text-3xl font-bold mb-4 text-teal-400">Education</h2>
       <div className="text-gray-300">
         <p className="text-xl font-semibold mb-1 text-gray-100">{education.degree}</p>
-        <p className="text-lg text-blue-400">{education.university}</p> {/* ปรับสีมหาวิทยาลัย */}
+        <p className="text-lg text-blue-400">{education.university}</p>
         <p className="text-gray-400 text-sm mt-1">{education.years}</p>
       </div>
     </section>
@@ -469,9 +500,8 @@ const EducationSection = () => {
 };
 
 // --- Component: Footer ---
-const Footer = () => {
+export const Footer = () => {
   return (
-    // ปรับสีข้อความและ border
     <footer className="text-center text-gray-400 text-sm mt-12 py-4 border-t border-gray-700">
       <p>&copy; {new Date().getFullYear()} Ravarich Clongcot. All rights reserved.</p>
     </footer>
