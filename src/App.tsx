@@ -471,11 +471,9 @@ export const ProjectCard = ({ name, description, technologies }: ProjectCardProp
             return (
               <span
                 key={index}
-                className={`flex items-center px-3 py-1 text-xs font-semibold rounded-full shadow-sm transition-colors duration-150 cursor-default ${details.colors}`}
                 title={tech}
               >
                 {details.icon && <span className="mr-1">{details.icon}</span>}
-                {tech} {/* แสดงชื่อเทคโนโลยี */}
               </span>
             );
           })}
