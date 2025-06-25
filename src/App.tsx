@@ -3,7 +3,7 @@ import { useState, type JSX } from 'react';
 // --- Type Definitions for TypeScript ---
 // กำหนด Type สำหรับ object ที่เก็บข้อมูลไอคอนและสีของเทคโนโลยี
 interface TechDetails {
-  icon: JSX.Element; // icon เป็น React Element (ในกรณีนี้คือ <img>)
+  icon: JSX.Element | null; // icon สามารถเป็น null ได้
   colors: string;     // colors เป็น string สำหรับ Tailwind CSS
 }
 
@@ -165,34 +165,25 @@ const techIcons: TechIconsMap = {
 };
 
 // Helper function to get tech details (icon and colors)
-// ระบุ Type ของ parameter 'techName' เป็น string และ return Type เป็น TechDetails
-const getTechDetails = (techName: string): TechDetails => techIcons[techName] || { icon: null as any, colors: "bg-gray-600 text-gray-200" };
+const getTechDetails = (techName: string): TechDetails => techIcons[techName] || { icon: null, colors: "bg-gray-600 text-gray-200" };
 
 
 // Main App Component
 const App = () => {
   return (
-    // เปลี่ยนพื้นหลังหลักเป็นสีเทาเข้มเกือบดำ และสีข้อความหลักเป็นสีอ่อน
     <div className="font-['Inter'] antialiased bg-gray-950 text-gray-100 min-h-screen">
-      {/* Container for the entire portfolio */}
       <div className="max-w-4xl mx-auto py-12 px-6 lg:px-8">
 
-        {/* Hero Section */}
         <HeroSection />
 
-        {/* About Section */}
         <AboutSection />
 
-        {/* Skills Section */}
         <SkillsSection />
 
-        {/* Work Experience Section */}
         <ExperienceSection />
 
-        {/* Education Section */}
         <EducationSection />
 
-        {/* Footer */}
         <Footer />
       </div>
     </div>
@@ -209,16 +200,19 @@ export const HeroSection = () => {
     address: "45/767 Ramkhamhaeng 58/3, Huamark, Bangkapi, Bangkok 10240",
   };
 
+  // CV Download Link
+  const cvDownloadLink = "https://drive.google.com/file/d/1sf3Pk5gCTnoy1YnGM4LOoDoDHq17ngtC/view?usp=sharing";
+
   return (
-    // ปรับ gradient ให้เข้มขึ้นและโทนสีดูเป็น programmer/geek มากขึ้น, shadow และเพิ่ม ring on hover
     <section className="mb-12 p-8 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl shadow-xl transform hover:scale-105 transition-transform duration-300 hover:ring-2 hover:ring-blue-500 hover:ring-offset-2 hover:ring-offset-gray-950">
       <div className="flex flex-col md:flex-row items-center justify-between">
         <div className="text-center md:text-left mb-6 md:mb-0">
-          {/* ปรับสีชื่อให้ดู 'Geek' ขึ้นด้วย gradient text */}
           <h1 className="text-5xl font-extrabold mb-2 leading-tight drop-shadow-md text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-cyan-300 to-green-300">Ravarich Clongcot</h1>
-          <p className="text-2xl font-light opacity-90 text-gray-300">Full Stack Developer</p> {/* ปรับสีข้อความ */}
+          <p className="text-2xl font-light opacity-90 text-gray-300">Full Stack Developer</p>
+          {/* CV Download Button Container - for alignment */}
+          
         </div>
-        <div className="text-sm text-center md:text-right space-y-1 text-gray-400"> {/* ปรับสีข้อความ */}
+        <div className="text-sm text-center md:text-right space-y-1 text-gray-400">
           <p className="flex items-center justify-center md:justify-end">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -231,6 +225,19 @@ export const HeroSection = () => {
             </svg>
             <a href={`tel:${contactInfo.telephone}`} className="hover:underline">{contactInfo.telephone}</a>
           </p>
+          <div className="flex justify-center md:justify-end mt-6">
+            <a
+              href={cvDownloadLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-2 py-1 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Download CV
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -240,9 +247,8 @@ export const HeroSection = () => {
 // --- Component: AboutSection ---
 export const AboutSection = () => {
   return (
-    // ปรับพื้นหลัง, shadow, border และสีข้อความ
     <section className="mb-12 p-8 bg-gray-900 rounded-xl shadow-lg border border-gray-700">
-      <h2 className="text-3xl font-bold mb-4 text-teal-400">Professional Summary</h2> {/* ปรับสีหัวข้อ */}
+      <h2 className="text-3xl font-bold mb-4 text-teal-400">Professional Summary</h2>
       <p className="text-gray-300 leading-relaxed">
         Highly accomplished Full Stack Developer with over <span className="font-semibold text-cyan-400">7 years of dedicated experience</span> in designing, developing, and optimizing high-performance web and mobile applications. Proven expertise across the entire stack, including modern frontend frameworks (Angular, React, Vue.js), robust backend technologies (JAVA Spring Boot, .NET Core, Node.js), and diverse database systems (SQL, NoSQL). A natural leader adept at steering cross-functional teams, enhancing system architecture, integrating complex third-party services, and crafting intuitive RESTful APIs that significantly boost functionality, performance, and user experience.
       </p>
@@ -272,12 +278,11 @@ export const SkillsSection = () => {
   };
 
   return (
-    // ปรับพื้นหลัง, shadow, border และสีข้อความ
     <section className="mb-12 p-8 bg-gray-900 rounded-xl shadow-lg border border-gray-700">
-      <h2 className="text-3xl font-bold mb-6 text-teal-400">Technical Skills</h2> {/* ปรับสีหัวข้อ */}
+      <h2 className="text-3xl font-bold mb-6 text-teal-400">Technical Skills</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          <h3 className="text-2xl font-semibold mb-4 text-purple-400 flex items-center"> {/* ปรับสีหัวข้อย่อย */}
+          <h3 className="text-2xl font-semibold mb-4 text-purple-400 flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 text-purple-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
             </svg>
@@ -296,7 +301,7 @@ export const SkillsSection = () => {
           </ul>
         </div>
         <div>
-          <h3 className="text-2xl font-semibold mb-4 text-purple-400 flex items-center"> {/* ปรับสีหัวข้อย่อย */}
+          <h3 className="text-2xl font-semibold mb-4 text-purple-400 flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 text-purple-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-1-3m-6.938-1.562L10 5m-5 5L10 10m11-4v4m0 0v4m0-4h-4m4 0h-4m-9-4h4m-4 0v4m0 0h4m-9-4v4" />
             </svg>
@@ -398,9 +403,8 @@ export const ExperienceSection = () => {
   ];
 
   return (
-    // ปรับพื้นหลัง, shadow, border และสีข้อความ
     <section className="mb-12 p-8 bg-gray-900 rounded-xl shadow-lg border border-gray-700">
-      <h2 className="text-3xl font-bold mb-6 text-teal-400">Work Experience</h2> {/* ปรับสีหัวข้อ */}
+      <h2 className="text-3xl font-bold mb-6 text-teal-400">Work Experience</h2>
       <div className="space-y-8">
         {experiences.map((exp, index) => (
           <JobCard key={index} {...exp} />
@@ -467,9 +471,11 @@ export const ProjectCard = ({ name, description, technologies }: ProjectCardProp
             return (
               <span
                 key={index}
+                className={`flex items-center px-3 py-1 text-xs font-semibold rounded-full shadow-sm transition-colors duration-150 cursor-default ${details.colors}`}
                 title={tech}
               >
                 {details.icon && <span className="mr-1">{details.icon}</span>}
+                {tech} {/* แสดงชื่อเทคโนโลยี */}
               </span>
             );
           })}
